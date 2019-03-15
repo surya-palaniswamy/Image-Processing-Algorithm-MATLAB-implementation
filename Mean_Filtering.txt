@@ -1,0 +1,4 @@
+image = imread('File_Name');
+mask = (1/9)*ones(3,3);
+new = conv2(double(image),(mask),'same');
+imshow(new,[]);

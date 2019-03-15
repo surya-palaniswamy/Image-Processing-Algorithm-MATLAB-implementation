@@ -1,0 +1,23 @@
+image = imread('File_Name');
+image = double(image);
+[m,n] = size(image);
+mask = [-1 -1 -1; -1 8 -1; -1 -1 -1 ];
+mean_mask = (1/9)*ones(3,3);
+
+new1 = conv2(image,mean_mask,'same');
+new2 = conv2(image,mask,'same');
+
+%this to get the smoothened image (without the sharp edges)
+new1 = i - new1;
+
+%this is to get the sharp features of the image
+new2 = new2 +i;
+new1 = new1+i;
+
+figure
+subplot(1,3,3);
+imshow(new1,[0 255]);
+subplot(1,3,1);
+imshow(image,[0 255]);
+subplot(1,3,2);
+imshow(new2,[0 255]);  %using edge detection mask and adding to original image

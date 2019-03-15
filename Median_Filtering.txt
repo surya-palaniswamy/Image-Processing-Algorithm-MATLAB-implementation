@@ -1,0 +1,23 @@
+%this is a slightly complexly explained code to make understanding easier
+image = imread('File_Name');
+[m,n] = size(image);
+mask = ones(3,3);
+g = image;
+g = [zeros(m,1),g];     %for adding columns
+g = [g, zeros(m,1)];
+g = [zeros(1,n+2);g];  %for adding rows
+g = [g;zeros(1,n+2)];
+new = zeros(m,n);
+for p = 2:m+1
+    for q = 2:n+1
+        val = [];
+         for r = -1:1
+            for s = -1:1
+                val= [val (g(p+r,q+s))];  %for making the vector for median function application
+            end
+         end
+         
+         new(p-1,q-1) = median(val(2:end));
+    end
+end
+imshow(new,[]);

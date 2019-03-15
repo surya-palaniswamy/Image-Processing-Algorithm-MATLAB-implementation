@@ -1,0 +1,17 @@
+image = imread('File_Name');
+
+i1 = imnoise(image,'gaussian',0,0.01);
+i1=double(i1);
+[m,n] = size(i);  
+
+val = gausswin(3,2.5);
+maskg1 = val*val';
+
+val = gausswin(3,1);
+maskg2 = val*val';
+
+i2 = conv2(i1,maskg1);
+i3 = conv2(i1,maskg2);
+i4 = i3 - i2;
+i3 = abs(i4);
+imshow(i4,[]);

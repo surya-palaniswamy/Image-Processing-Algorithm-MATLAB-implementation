@@ -1,0 +1,17 @@
+image = imread('File_Name');
+[m,n] = size(image);
+h = imhist(image);
+tot = sum(h);
+
+check = zeros(1,255);
+for t=2:256
+    w0 = sum(h(1:t));
+    w1 = sum(h(t:256));
+    sigma0 = var(h(1:t));
+    sigma1 = var(h(t+1:255));
+    check(t-1) = (w0*sigma0^2) + (w1*sigma1^2);
+end
+
+[val,ind] = min(check);
+i = i>=ind;
+imshow(i,[]);

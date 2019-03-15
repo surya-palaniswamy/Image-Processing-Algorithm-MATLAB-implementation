@@ -1,0 +1,51 @@
+img = imread('Cameraman.tif');
+img = double(img);
+[m,n] = size(img);
+length = m*n;
+
+iter = 100;
+img = reshape(img,[1,length]);
+
+%define the number of clusters needed
+k = 10;
+count = zeros(1,k);
+
+%initialising centroids that are evenly spread out across the intensities
+centroids = 1:(255)/(k):255;
+centroids = floor(centroids);
+
+updated = zeros(1,k);
+class = zeros(length,2);
+while centroids ~= updated & iter >= 0
+   updated = centroids;
+   count = zeros(1,k);
+    for i=1:length
+        val = zeros(k,1);
+        for j = 1:k
+            val(j) = abs(centroids(j) - img(i));
+        end
+        [val,ind] = min(val);
+        class(i,1) = ind;
+        class(i,2) = img(i);
+    end
+    updated = zeros(1,k);
+    for j = 1:length
+        count(class(j,1)) = count(class(j,1)) +1;
+        updated(class(j,1)) = updated(class(j,1)) + class(j,2);
+    end
+    temp = centroids;
+    centroids = floor(updated./count);
+    upated = temp;
+    iter = iter-1;
+end
+for i = 1:k
+    for j = 1:length
+        if class(j,1) == i
+            img(j) = 1;
+        else
+            img(j) = 0;
+        end
+    end
+    figure,imshow(reshape(img,[m,n]),[])
+    title(['Class ',num2str(i)]);
+end

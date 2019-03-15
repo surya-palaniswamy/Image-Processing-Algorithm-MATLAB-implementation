@@ -1,0 +1,19 @@
+image = imread('File_Name');
+a = 1:256;
+[m,n] = size(image);
+
+h = imhist(image);
+
+%threshold initialisation
+t = 0;
+tn=105;
+
+%finding the best thresholding value to use
+while tn~=t
+    t=tn;
+    Mean_Val=[sum(a(1:tn)*h(1:tn))/(sum(h(1:tn))),sum(a(tn:256)*h(tn:256))/(sum(h(tn:256)))];
+    tn=mean(Mean_Val);
+end 
+
+image = (image>=tn);
+imshow(image,[]);

@@ -1,0 +1,23 @@
+image = imread('File_Name');
+
+%adding noise of our own to test out the algorithm
+i1 = imnoise(image,'gaussian',0,0.01);
+figure,imshow(i1,[]);
+[m,n] = size(i);
+
+i1 = fft2(i1);                       % frequency plot centred around the axes from centre of image
+i1 = fftshift(i1);                   %shifted to avoid repeating freq
+
+mask = zeros(m,n);
+for p = 1:m
+   for q = 1:n
+       val = sqrt(((p-(m/2))^2) + ((q-(n/2))^2));
+       div = (val/100)^2;
+       mask(p,q) = 1/sqrt((1+div));
+   end
+end
+
+i1 = i1.*mask;
+i1 = ifft2(ifftshift(i1));
+i1 = abs(i1);
+figure,imshow(i1,[]);

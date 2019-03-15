@@ -1,0 +1,46 @@
+img = imread('cameraman.tif');
+img = double(img);
+img_new = img;
+[m,n] = size(img);
+r = zeros(m,n);
+
+%lambda usually between 0.04 and 0.06
+lambda = 0.04;
+%thresholding is subjective to the case
+t = 10000000;
+
+mask_mean = (1/9)*ones(3,3);
+img = conv2(img,mask_mean,'same');
+maskx = [1 0 -1;2 0 -2;1 0 -1];
+masky = [1 2 1;0 0 0;-1 -2 -1];
+mask = [0 1 0;1 -4 1;0 1 0];
+ix = conv2(img,maskx,'same');
+iy = conv2(img,masky,'same');
+h = zeros(2,2);
+ix2 = ix.*ix;
+iy2 = iy.*iy;
+ixy = ix.*iy;
+sx2 = conv2(ix2,mask,'same');
+sy2 = conv2(iy2,mask,'same');
+sxy = conv2(ixy,mask,'same');
+for i = 1:m
+    for j =1:n
+        h = [sx2(i,j) sxy(i,j);sxy(i,j) sy2(i,j)];
+        r(i,j) = det(h) - lambda*(trace(h)*trace(h));
+    end
+end
+
+img_new = (r>t);
+corner = zeros(m,n,3);
+corner(:,:,1) = img_new*255;
+img = uint8(img);
+temp = zeros(m,n,3);
+temp(:,:,1) = img;
+temp(:,:,2) = img;
+temp(:,:,3) = img;
+temp = uint8(temp);
+corner = uint8(corner);
+figure,imshow(temp,[]);
+figure,imshow(corner,[]);
+figure,imshow(corner+temp,[]);
+        

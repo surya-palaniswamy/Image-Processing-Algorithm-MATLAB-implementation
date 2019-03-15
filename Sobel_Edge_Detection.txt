@@ -1,0 +1,12 @@
+image = imread('File_Name');
+i1 = imnoise(image,'gaussian');
+i1 = double(i1);
+
+mgx = [-1 0 1;-2 0 2;-1 0 1];
+mgy = [-1 -2 -1;0 0 0;1 2 1];
+
+gx = conv2(i1,mgx,'same');
+gy = conv2(i1,mgy,'same');
+
+i2 = sqrt((gx.*gx)+(gy.*gy));
+figure,imshow(i2,[]);
